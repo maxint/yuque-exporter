@@ -1,0 +1,6 @@
+requests
+easydict
+pyyaml
+python-dateutil
+pytz
+# beautifulsoup4
