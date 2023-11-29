@@ -59,6 +59,7 @@ class SDK:
         self.token = token
         self.host = host or 'https://www.yuque.com'
         self.user_agent = user_agent or 'yuque-sdk'
+        assert token
 
     def request(self, api: str):
         headers = {
@@ -166,16 +167,18 @@ def setup_logging(logger, log_file='main.log'):
     logger.addHandler(console_handler)
 
 
+def load_token(config_path = 'config.json'):
+    import json
+    token = json.load(open('config.json', encoding="utf-8")).get('token')
+    return token
+
+
 def main():
     logger.setLevel(logging.DEBUG)
     os.makedirs(meta_dir, exist_ok=True)
     setup_logging(logger, f'{meta_dir}/main.log')
 
-    import json
-    config = json.load(open('config.json', encoding="utf-8"))
-    token = config.get('token', None)
-    assert token
-    sdk = SDK(token)
+    sdk = SDK(load_token())
     cache = Cache(meta_dir)
 
     cached_user_info = cache.get_user()
